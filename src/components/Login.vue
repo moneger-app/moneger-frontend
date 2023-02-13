@@ -22,8 +22,14 @@ export default {
         }
     },
     mounted() {
+        this.verifyAuthentication()
     },
     methods: {
+        verifyAuthentication() {
+            if (localStorage.getItem('isAuthenticated')) {
+                this.$router.replace('/main')
+            }
+        },
     }
 }
 </script>

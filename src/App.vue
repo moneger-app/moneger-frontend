@@ -35,6 +35,8 @@ export default {
     },
     mounted() {
         this.getThemeFromStorage()
+        this.verifyAuthentication()
+
         // google authentication
         window.googleSignIn = this.googleSignIn
     },
@@ -46,9 +48,22 @@ export default {
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark
             localStorage.setItem('darkTheme', this.$vuetify.theme.dark ? '1' : '0')
         },
-        googleSignIn(cred) {
-            this.$axios.post('/google/auth', { token: cred.credential })
-        }
+        async googleSignIn(cred) {
+            await this.$axios.post('/google/auth', { token: cred.credential })
+                .then(() => {
+                    localStorage.setItem('isAuthenticated', '1')
+                    this.$router.back()
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        },
+        verifyAuthentication() {
+            if (!localStorage.getItem('isAuthenticated')) {
+                if (this.$route.path.includes('login')) return
+                this.$router.push('/login')
+            }
+        },
     },
 }
 </script>
