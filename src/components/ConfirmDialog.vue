@@ -6,8 +6,8 @@
             <span class="dialog-title">{{ title }}</span>
             <span class="text-center mb-4">{{ description }}</span>
             <div class="text-center mb-3">
-                <v-btn class="mr-2">{{ yesTextButton }}</v-btn>
-                <v-btn>{{ noTextButton }}</v-btn>
+                <v-btn class="mr-2" @click="$emit('confirmed')">{{ yesTextButton }}</v-btn>
+                <v-btn @click="">{{ noTextButton }}</v-btn>
             </div>
         </v-card>
     </v-dialog>
