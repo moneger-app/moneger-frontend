@@ -1,7 +1,12 @@
 <template>
     <div>
-        <v-btn @click="getProfile">MainPage</v-btn>
-        {{ accounts }}
+        <div
+            v-if="!totalCount"
+            class="d-flex flex-column text-center"
+        >
+            <span>У Вас отсутвуют счета</span>
+            <v-btn>Создать</v-btn>
+        </div>
     </div>
 </template>
 
@@ -10,16 +15,21 @@ export default {
     name: "Main",
     data() {
         return {
-            accounts: null
+            accounts: [],
+            totalCount: 0,
         }
     },
     async mounted() {
-        this.accounts = await this.$axios.get('/account')
+        await this.getAccounts()
     },
     methods: {
-        async getProfile() {
-            console.log(await this.$axios.get('/profile'))
-        }
+        async getAccounts() {
+            let data = await this.$axios.get('/account')
+            console.log(data)
+
+            this.accounts = data.accounts
+            this.totalCount = data.totalCount
+        },
     }
 }
 </script>

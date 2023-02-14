@@ -3,7 +3,17 @@
         <div class="fill-height">
             <div class="header">
                 <div class="d-flex justify-space-between mb-4">
-                    <span>moneger</span>
+                    <div class="d-flex">
+                        <v-btn
+                            v-if="isAuth"
+                            class="mt-1"
+                            icon
+                            @click="$refs.navigationDrawer.openMenu()"
+                        >
+                            <v-icon>mdi-menu</v-icon>
+                        </v-btn>
+                        <span>moneger</span>
+                    </div>
                     <v-btn
                         @click="toggleDarkTheme"
                         icon
@@ -18,24 +28,40 @@
                     <router-view/>
                 </div>
             </div>
+
+            <navigation-drawer
+                v-if="isAuth"
+                ref="navigationDrawer"
+                :credentials="credentials"
+            />
+
         </div>
     </v-app>
 </template>
 
 <script>
 import Login from "./components/Login.vue";
+import NavigationDrawer from "./components/NavigationDrawer.vue";
 
 export default {
     name: 'App',
     components: {
+        NavigationDrawer,
         Login,
     },
     data() {
-        return {}
+        return {
+            isAuth: false,
+            credentials: {},
+        }
     },
-    mounted() {
+    async mounted() {
         this.getThemeFromStorage()
         this.verifyAuthentication()
+
+        if (this.isAuth) {
+            this.credentials = await this.$axios.get('/profile')
+        }
 
         // google authentication
         window.googleSignIn = this.googleSignIn
@@ -51,15 +77,19 @@ export default {
         async googleSignIn(cred) {
             await this.$axios.post('/google/auth', { token: cred.credential })
                 .then(() => {
+                    this.isAuth = true
                     localStorage.setItem('isAuthenticated', '1')
                     this.$router.back()
                 })
                 .catch((err) => {
                     console.log(err)
                 })
+
+            this.credentials = await this.$axios.get('/profile')
         },
         verifyAuthentication() {
-            if (!localStorage.getItem('isAuthenticated')) {
+            this.isAuth = localStorage.getItem('isAuthenticated')
+            if (!this.isAuth) {
                 if (this.$route.path.includes('login')) return
                 this.$router.push('/login')
             }
