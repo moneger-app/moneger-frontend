@@ -25,7 +25,6 @@ export default {
     methods: {
         async getAccounts() {
             let data = await this.$axios.get('/account')
-            console.log(data)
 
             this.accounts = data.accounts
             this.totalCount = data.totalCount

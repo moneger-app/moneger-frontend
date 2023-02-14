@@ -26,7 +26,7 @@
                     <v-list-item-title>Мои счета</v-list-item-title>
                 </v-list-item>
 
-                <v-list-item link class="list-item" @click="showLogOutDialog = true">
+                <v-list-item link class="list-item" @click="$refs.logOutDialog.openDialog()">
                     <v-list-item-icon class="item-icon">
                         <v-icon>mdi-logout</v-icon>
                     </v-list-item-icon>
@@ -36,6 +36,11 @@
         </v-navigation-drawer>
 
         <confirm-dialog
+            ref="logOutDialog"
+            title="Выход"
+            description="Вы уверены, что хотите выйти?"
+            yes-text-button="Да"
+            no-text-button="Нет"
         />
     </div>
 </template>
@@ -52,7 +57,6 @@ export default {
     data() {
         return {
             menuIsOpen: false,
-            showLogOutDialog: false,
         }
     },
     methods: {
