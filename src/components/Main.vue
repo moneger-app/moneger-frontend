@@ -7,18 +7,27 @@
             <div class="mb-3">У Вас отсутвуют счета</div>
             <v-btn
                 class="mx-auto"
-                @click="createAccount"
+                @click="$refs.accountDialog.openDialog()"
             >
                 <v-icon>mdi-plus</v-icon>
                 <span>Создать</span>
             </v-btn>
         </div>
+
+        <account-dialog
+            ref="accountDialog"
+            @accountCreated="getAccounts"
+        />
+
     </div>
 </template>
 
 <script>
+import AccountDialog from "./AccountDialog.vue";
+
 export default {
     name: "Main",
+    components: { AccountDialog },
     data() {
         return {
             accounts: [],

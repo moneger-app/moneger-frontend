@@ -26,7 +26,7 @@
                     <v-list-item-title>Мои счета</v-list-item-title>
                 </v-list-item>
 
-                <v-list-item link class="list-item" @click="$refs.logOutDialog.openDialog()">
+                <v-list-item link class="list-item" @click="$refs.logoutDialog.openDialog()">
                     <v-list-item-icon class="item-icon">
                         <v-icon>mdi-logout</v-icon>
                     </v-list-item-icon>
@@ -37,7 +37,7 @@
         </v-navigation-drawer>
 
         <confirm-dialog
-            ref="logOutDialog"
+            ref="logoutDialog"
             @confirmed="logOut"
             title="Выход"
             description="Вы уверены, что хотите выйти?"
@@ -49,10 +49,11 @@
 
 <script>
 import ConfirmDialog from "./ConfirmDialog.vue";
+import AccountDialog from "./AccountDialog.vue";
 
 export default {
     name: "NavigationDrawer",
-    components: {ConfirmDialog},
+    components: {AccountDialog, ConfirmDialog},
     props: {
         credentials: {},
     },
