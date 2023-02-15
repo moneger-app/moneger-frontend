@@ -32,11 +32,13 @@
                     </v-list-item-icon>
                     <v-list-item-title>Выйти из аккаунта</v-list-item-title>
                 </v-list-item>
+
             </v-list>
         </v-navigation-drawer>
 
         <confirm-dialog
             ref="logOutDialog"
+            @confirmed="logOut"
             title="Выход"
             description="Вы уверены, что хотите выйти?"
             yes-text-button="Да"
@@ -62,6 +64,12 @@ export default {
     methods: {
         openMenu() {
             this.menuIsOpen = true
+        },
+        async logOut() {
+            await this.$axios.get('/logout')
+            localStorage.removeItem('isAuthenticated')
+            this.$router.push('/login')
+            this.$router.go(0)
         }
     }
 }

@@ -2,10 +2,16 @@
     <div>
         <div
             v-if="!totalCount"
-            class="d-flex flex-column text-center"
+            class="no-accounts d-flex flex-column text-center"
         >
-            <span>У Вас отсутвуют счета</span>
-            <v-btn>Создать</v-btn>
+            <div class="mb-3">У Вас отсутвуют счета</div>
+            <v-btn
+                class="mx-auto"
+                @click="createAccount"
+            >
+                <v-icon>mdi-plus</v-icon>
+                <span>Создать</span>
+            </v-btn>
         </div>
     </div>
 </template>
@@ -34,5 +40,8 @@ export default {
 </script>
 
 <style scoped>
-
+.no-accounts {
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
 </style>
