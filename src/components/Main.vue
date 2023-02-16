@@ -1,8 +1,9 @@
 <template>
-    <div>
+    <div class="d-flex flex-column text-center wrap">
+
         <div
             v-if="!totalCount"
-            class="no-accounts d-flex flex-column text-center"
+            class="no-accounts"
         >
             <div class="mb-3">У Вас отсутвуют счета</div>
             <v-btn
@@ -12,6 +13,11 @@
                 <v-icon>mdi-plus</v-icon>
                 <span>Создать</span>
             </v-btn>
+        </div>
+        <div v-else class="d-flex flex-column align-center">
+            <span class="mb-5">Общая сумма всех счетов</span>
+            <span class="mb-5">{{ getTotalSum() }}</span>
+            <v-btn>Добавить транзакцию</v-btn>
         </div>
 
         <account-dialog
@@ -44,12 +50,18 @@ export default {
             this.accounts = data.accounts
             this.totalCount = data.totalCount
         },
+        getTotalSum() {
+            let totalSum = 0
+            this.accounts.forEach(value => totalSum += value.balance)
+
+            return totalSum
+        },
     }
 }
 </script>
 
 <style scoped>
-.no-accounts {
+.wrap {
     font-size: 1.5rem;
     font-weight: bolder;
 }
