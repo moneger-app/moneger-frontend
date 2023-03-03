@@ -15,6 +15,7 @@
                 :rules="[value => !!value.length || 'Обязательное поле']"
             />
             <v-select
+                v-if="isFirstAccount"
                 ref="currency"
                 label="Валюта"
                 v-model="currency"
@@ -47,6 +48,9 @@
 <script>
 export default {
     name: "AccountDialog",
+    props: {
+        isFirstAccount: false,
+    },
     data() {
         return {
             isOpen: false,
@@ -65,7 +69,7 @@ export default {
                 this.$refs.name.focus()
                 return
             }
-            if (!this.currency.length) {
+            if (this.isFirstAccount && !this.currency.length) {
                 this.$refs.currency.focus()
                 return
             }
@@ -74,21 +78,18 @@ export default {
                 return
             }
 
-            if (!!this.name.length && !!this.currency.length && !!this.balance.length) {
-                let data = {
-                    name: this.name,
-                    currency: this.currency,
-                    balance: this.balance,
-                    showInTotal: this.showInTotal
-                }
-
-                await this.$axios.post('/account', data)
-
-                this.$emit('accountCreated')
-                this.isOpen = false
-
-                return
+            let data = {
+                name: this.name,
+                balance: this.balance,
+                showInTotal: this.showInTotal
             }
+
+            await this.$axios.post('/account', data)
+
+            if (this.isFirstAccount && this.currency !== 'USD')  await this.$axios.put('/profile/options/currency', { currency: this.currency })
+
+            this.$emit('accountCreated')
+            this.isOpen = false
         },
     },
 }
