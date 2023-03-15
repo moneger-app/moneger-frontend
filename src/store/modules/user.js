@@ -1,24 +1,18 @@
 export default {
     state: {
-        id: 0,
-        authorized: false,
+        user: {},
     },
     mutations: {
-        setId(state, id) {
-            state.id = id
+        setUser(state, data) {
+            state.user = data
         },
-        setAuthorized(state, value) {
-            state.authorized = value
-        }
     },
     actions: {
-        fetchId({ commit }, id) {
-            commit('setId', id)
-            commit('setAuthorized', true)
+        fetchUser({ commit }, data) {
+            commit('setUser', data)
         }
     },
     getters: {
-        getId: ({ id }) => id,
-        getAuthorized: ({ authorized }) => authorized,
+        getUser: ({ user }) => user,
     },
 }

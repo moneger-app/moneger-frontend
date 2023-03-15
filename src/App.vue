@@ -30,9 +30,8 @@
             </div>
 
             <navigation-drawer
-                v-if="isAuth"
+                v-if="isAuth && this.credentials"
                 ref="navigationDrawer"
-                :credentials="credentials"
             />
 
         </div>
@@ -52,7 +51,7 @@ export default {
     data() {
         return {
             isAuth: false,
-            credentials: {},
+            credentials: undefined,
         }
     },
     async mounted() {
@@ -61,6 +60,7 @@ export default {
 
         if (this.isAuth) {
             this.credentials = await this.$axios.get('/profile')
+            this.$store.dispatch('fetchUser', this.credentials)
         }
 
         // google authentication
@@ -76,16 +76,16 @@ export default {
         },
         async googleSignIn(cred) {
             await this.$axios.post('/google/auth', { token: cred.credential })
-                .then(() => {
+                .then(async() => {
                     this.isAuth = true
                     localStorage.setItem('isAuthenticated', '1')
                     this.$router.back()
+                    this.credentials = await this.$axios.get('/profile')
+                    this.$store.dispatch('fetchUser', this.credentials)
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-
-            this.credentials = await this.$axios.get('/profile')
         },
         verifyAuthentication() {
             this.isAuth = localStorage.getItem('isAuthenticated')

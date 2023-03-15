@@ -24,11 +24,6 @@
 <script>
 export default {
     name: "Login",
-
-    data() {
-        return {
-        }
-    },
     mounted() {
         this.verifyAuthentication()
     },

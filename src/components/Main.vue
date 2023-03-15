@@ -52,7 +52,7 @@ export default {
             let totalSum = 0
             this.accounts.forEach(value => totalSum += value.balance)
 
-            return this.accounts[0].currency + ' ' + String(totalSum)
+            return this.$store.getters.getUser.currency + ' ' + String(totalSum)
         },
     },
     methods: {

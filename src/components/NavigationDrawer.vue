@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="credentials">
         <v-navigation-drawer
             class="pa-4"
             v-model="menuIsOpen"
@@ -54,13 +54,14 @@ import AccountDialog from "./AccountDialog.vue";
 export default {
     name: "NavigationDrawer",
     components: {AccountDialog, ConfirmDialog},
-    props: {
-        credentials: {},
-    },
     data() {
         return {
             menuIsOpen: false,
+            credentials: null,
         }
+    },
+    mounted() {
+        this.credentials = this.$store.getters.getUser
     },
     methods: {
         openMenu() {
