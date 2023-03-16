@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../components/Login.vue";
 import Main from "../components/Main.vue";
+import Accounts from "../components/Accounts.vue";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ export default new VueRouter ({
             name: 'Main',
             path: '/main',
             component: Main
+        },
+        {
+            name: 'Accounts',
+            path: '/accounts',
+            component: Accounts
         },
     ]
 })

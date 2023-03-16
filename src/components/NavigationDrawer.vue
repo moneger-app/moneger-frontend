@@ -19,7 +19,7 @@
             <v-divider/>
             <v-list class="pa-0">
 
-                <v-list-item link  class="list-item" >
+                <v-list-item link  class="list-item" @click="$router.push('/accounts')">
                     <v-list-item-icon class="item-icon">
                         <v-icon>mdi-cash-multiple</v-icon>
                     </v-list-item-icon>

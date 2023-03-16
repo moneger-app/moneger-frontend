@@ -59,8 +59,7 @@ export default {
         this.verifyAuthentication()
 
         if (this.isAuth) {
-            this.credentials = await this.$axios.get('/profile')
-            this.$store.dispatch('fetchUser', this.credentials)
+            await this.$store.dispatch('fetchUser')
         }
 
         // google authentication
@@ -75,17 +74,15 @@ export default {
             localStorage.setItem('darkTheme', this.$vuetify.theme.dark ? '1' : '0')
         },
         async googleSignIn(cred) {
-            await this.$axios.post('/google/auth', { token: cred.credential })
-                .then(async() => {
-                    this.isAuth = true
-                    localStorage.setItem('isAuthenticated', '1')
+            const data = {
+                token: cred.credential
+            }
+            await this.$store.dispatch('signIn', data).then(value => {
+                if (value) {
                     this.$router.back()
-                    this.credentials = await this.$axios.get('/profile')
-                    this.$store.dispatch('fetchUser', this.credentials)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+                    this.isAuth = true
+                }
+            })
         },
         verifyAuthentication() {
             this.isAuth = localStorage.getItem('isAuthenticated')
