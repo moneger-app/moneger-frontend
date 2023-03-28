@@ -1,8 +1,7 @@
 <template>
     <div class="wrap">
-
         <div
-            v-if="!totalCount"
+            v-if="!accounts.length"
             class="no-accounts"
         >
             <div class="mb-3">У Вас отсутвуют счета</div>
@@ -24,9 +23,9 @@
         </div>
 
         <account-dialog
+            v-if="!accounts.length"
             ref="accountDialog"
-            :isFirstAccount="!totalCount"
-            @accountCreated="getAccounts"
+            :isFirstAccount="true"
         />
 
     </div>
@@ -40,29 +39,28 @@ export default {
     components: { AccountDialog },
     data() {
         return {
-            accounts: [],
-            totalCount: 0,
         }
     },
     async mounted() {
-        await this.getAccounts()
     },
     computed: {
         getTotalSum() {
             let totalSum = 0
-            this.accounts.forEach(value => totalSum += value.balance)
+            this.accounts.forEach(value => {
+                if (value.showInTotal) {
+                    totalSum += value.balance
+                }
+            })
 
             return this.$store.getters.getUser.currency + ' ' + String(totalSum)
         },
+        accounts() {
+            return this.$store.getters.getAccounts || []
+        },
     },
     methods: {
-        async getAccounts() {
-            let data = await this.$axios.get('/account')
 
-            this.accounts = data.accounts
-            this.totalCount = data.totalCount
-        },
-    }
+    },
 }
 </script>
 

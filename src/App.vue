@@ -12,7 +12,7 @@
                         >
                             <v-icon>mdi-menu</v-icon>
                         </v-btn>
-                        <span>moneger</span>
+                        <span @click="goToMain">moneger</span>
                     </div>
                     <v-btn
                         @click="toggleDarkTheme"
@@ -30,7 +30,7 @@
             </div>
 
             <navigation-drawer
-                v-if="isAuth && this.credentials"
+                v-if="isAuth"
                 ref="navigationDrawer"
             />
 
@@ -60,6 +60,7 @@ export default {
 
         if (this.isAuth) {
             await this.$store.dispatch('fetchUser')
+            await this.$store.dispatch('fetchAccounts')
         }
 
         // google authentication
@@ -77,10 +78,16 @@ export default {
             const data = {
                 token: cred.credential
             }
-            await this.$store.dispatch('signIn', data).then(value => {
+            await this.$store.dispatch('signIn', data).then(async value => {
                 if (value) {
-                    this.$router.back()
                     this.isAuth = true
+
+                    await this.$store.dispatch('fetchAccounts')
+                    if (this.$store.getters.getAccounts.length) {
+                        this.$router.back()
+                    } else {
+                        await this.$router.push('/main')
+                    }
                 }
             })
         },
@@ -91,6 +98,11 @@ export default {
                 this.$router.push('/login')
             }
         },
+        goToMain() {
+            if (this.isAuth && !this.$route.path.includes('main')) {
+                this.$router.push('/main')
+            }
+        }
     },
 }
 </script>

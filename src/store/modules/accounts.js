@@ -5,17 +5,22 @@ export default function ($axios) {
         },
         mutations: {
             setAccounts(state, data) {
-                state.user = data
+                state.accounts = data
             },
         },
         actions: {
             async fetchAccounts({ commit }) {
-                let data = await $axios.get('/profile')
-                commit('setUser', data)
+                const data = await $axios.get('/account')
+                let accounts = data.accounts
+                accounts.forEach(item => {
+                    item.showInTotal = item.show_in_total
+                    delete item.show_in_total
+                })
+                commit('setAccounts', data.accounts)
             }
         },
         getters: {
-            getAccounts: ({ user }) => user,
+            getAccounts: ({ accounts }) => accounts,
         },
     }
 }

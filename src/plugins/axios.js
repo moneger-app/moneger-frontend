@@ -19,3 +19,11 @@ export default function() {
         return error
     })
 }
+
+// const ax = axios.create({
+//     baseURL: 'http://localhost:8090',
+//     withCredentials: true
+// });
+//
+// export default ax;
+

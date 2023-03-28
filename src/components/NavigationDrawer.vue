@@ -7,7 +7,7 @@
         >
             <div class="mb-2">
                 <div class="d-flex justify-space-between mb-2">
-                    <img class="profile-img" :src="credentials.picture_link">
+                    <img alt="Картинка профиля" class="profile-img" :src="credentials.picture_link">
                     <v-icon @click="menuIsOpen = false">mdi-arrow-left</v-icon>
                 </div>
                 <div class="full-name">
@@ -19,7 +19,7 @@
             <v-divider/>
             <v-list class="pa-0">
 
-                <v-list-item link  class="list-item" @click="$router.push('/accounts')">
+                <v-list-item link  class="list-item" @click="goToAccounts()">
                     <v-list-item-icon class="item-icon">
                         <v-icon>mdi-cash-multiple</v-icon>
                     </v-list-item-icon>
@@ -44,6 +44,14 @@
             yes-text-button="Да"
             no-text-button="Нет"
         />
+
+        <v-snackbar
+            v-model="snackbarActive"
+            timeout="2000"
+            color="error"
+        >
+            <span class="d-flex justify-center">У Вас отсутсвуют счета</span>
+        </v-snackbar>
     </div>
 </template>
 
@@ -57,11 +65,13 @@ export default {
     data() {
         return {
             menuIsOpen: false,
-            credentials: null,
+            snackbarActive: false,
         }
     },
-    mounted() {
-        this.credentials = this.$store.getters.getUser
+    computed: {
+        credentials() {
+            return this.$store.getters.getUser
+        },
     },
     methods: {
         openMenu() {
@@ -72,7 +82,17 @@ export default {
             localStorage.removeItem('isAuthenticated')
             this.$router.push('/login')
             this.$router.go(0)
-        }
+        },
+        goToAccounts() {
+            const accountsLength = this.$store.getters.getAccounts.length
+
+            this.snackbarActive = !accountsLength
+            if (!accountsLength) return
+
+            if (!this.$route.path.includes('accounts')) {
+                this.$router.push('/accounts')
+            }
+        },
     }
 }
 </script>

@@ -60,6 +60,9 @@ export default {
             showInTotal: true,
         }
     },
+    computed: {
+
+    },
     methods: {
         openDialog() {
             this.isOpen = true
@@ -86,9 +89,10 @@ export default {
 
             await this.$axios.post('/account', data)
 
+            await this.$store.dispatch('fetchAccounts')
+
             if (this.isFirstAccount && this.currency !== 'USD')  await this.$axios.put('/profile/options/currency', { currency: this.currency })
 
-            this.$emit('accountCreated')
             this.isOpen = false
         },
     },
