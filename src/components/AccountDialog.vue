@@ -42,12 +42,20 @@
                 <v-btn @click="createAccount">Создать</v-btn>
             </div>
         </v-card>
+
+        <error-message
+            ref="errorMessage"
+            error-text="Счёт с таким именем уже существует"
+        />
     </v-dialog>
 </template>
 
 <script>
+import ErrorMessage from "./errorMessage.vue";
+
 export default {
     name: "AccountDialog",
+    components: {ErrorMessage},
     props: {
         isFirstAccount: false,
     },
@@ -58,6 +66,7 @@ export default {
             currency: '',
             balance: '',
             showInTotal: true,
+            snackbarActive: false,
         }
     },
     computed: {
@@ -87,13 +96,19 @@ export default {
                 showInTotal: this.showInTotal
             }
 
-            await this.$axios.post('/account', data)
+            await this.$axios.post('/account', data).then(async response => {
+                if (response === 409) {
+                    this.$refs.errorMessage.showMessage()
+                    return
+                }
+                await this.$store.dispatch('fetchAccounts')
 
-            await this.$store.dispatch('fetchAccounts')
+                if (this.isFirstAccount && this.currency !== 'USD') {
+                    await this.$axios.put('/profile/options/currency', { currency: this.currency })
+                }
 
-            if (this.isFirstAccount && this.currency !== 'USD')  await this.$axios.put('/profile/options/currency', { currency: this.currency })
-
-            this.isOpen = false
+                this.isOpen = false
+            })
         },
     },
 }

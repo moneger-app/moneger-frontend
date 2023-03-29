@@ -12,7 +12,7 @@
                         >
                             <v-icon>mdi-menu</v-icon>
                         </v-btn>
-                        <span @click="goToMain">moneger</span>
+                        <span>moneger</span>
                     </div>
                     <v-btn
                         @click="toggleDarkTheme"
@@ -98,11 +98,6 @@ export default {
                 this.$router.push('/login')
             }
         },
-        goToMain() {
-            if (this.isAuth && !this.$route.path.includes('main')) {
-                this.$router.push('/main')
-            }
-        }
     },
 }
 </script>
@@ -110,7 +105,7 @@ export default {
 <style>
 .header {
     width: 100%;
-    position: absolute;
+    position: fixed;
     padding: 20px;
     font-family: "Yu Gothic UI Semibold";
     font-size: 1.5rem;

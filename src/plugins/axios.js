@@ -14,16 +14,11 @@ export default function() {
         if (error.response.status === 401) {
             localStorage.removeItem('isAuthenticated')
             location.reload()
-
         }
+
+        if (error.response.status === 409) return error.response.status
+
         return error
     })
 }
-
-// const ax = axios.create({
-//     baseURL: 'http://localhost:8090',
-//     withCredentials: true
-// });
-//
-// export default ax;
 

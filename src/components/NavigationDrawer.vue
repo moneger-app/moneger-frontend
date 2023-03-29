@@ -19,6 +19,13 @@
             <v-divider/>
             <v-list class="pa-0">
 
+                <v-list-item link  class="list-item" @click="goToMain()">
+                    <v-list-item-icon class="item-icon">
+                        <v-icon>mdi-home</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Главная</v-list-item-title>
+                </v-list-item>
+
                 <v-list-item link  class="list-item" @click="goToAccounts()">
                     <v-list-item-icon class="item-icon">
                         <v-icon>mdi-cash-multiple</v-icon>
@@ -45,27 +52,24 @@
             no-text-button="Нет"
         />
 
-        <v-snackbar
-            v-model="snackbarActive"
-            timeout="2000"
-            color="error"
-        >
-            <span class="d-flex justify-center">У Вас отсутсвуют счета</span>
-        </v-snackbar>
+        <error-message
+            ref="errorMessage"
+            error-text="У Вас отсутсвуют счета"
+        />
     </div>
 </template>
 
 <script>
 import ConfirmDialog from "./ConfirmDialog.vue";
 import AccountDialog from "./AccountDialog.vue";
+import ErrorMessage from "./errorMessage.vue";
 
 export default {
     name: "NavigationDrawer",
-    components: {AccountDialog, ConfirmDialog},
+    components: {ErrorMessage, AccountDialog, ConfirmDialog},
     data() {
         return {
             menuIsOpen: false,
-            snackbarActive: false,
         }
     },
     computed: {
@@ -83,11 +87,18 @@ export default {
             this.$router.push('/login')
             this.$router.go(0)
         },
+        goToMain() {
+            if (!this.$route.path.includes('main')) {
+                this.$router.push('/main')
+            }
+        },
         goToAccounts() {
             const accountsLength = this.$store.getters.getAccounts.length
 
-            this.snackbarActive = !accountsLength
-            if (!accountsLength) return
+            if (!accountsLength) {
+                this.$refs.errorMessage.showMessage()
+                return
+            }
 
             if (!this.$route.path.includes('accounts')) {
                 this.$router.push('/accounts')

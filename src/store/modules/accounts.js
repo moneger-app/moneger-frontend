@@ -1,7 +1,7 @@
 export default function ($axios) {
     return {
         state: {
-            accounts: {},
+            accounts: [],
         },
         mutations: {
             setAccounts(state, data) {
@@ -15,6 +15,9 @@ export default function ($axios) {
                 accounts.forEach(item => {
                     item.showInTotal = item.show_in_total
                     delete item.show_in_total
+
+                    item.isAdjusted = false
+                    item.adjustedName = item.name
                 })
                 commit('setAccounts', data.accounts)
             }
