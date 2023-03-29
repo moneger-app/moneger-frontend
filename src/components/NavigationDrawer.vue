@@ -61,7 +61,7 @@
 
 <script>
 import ConfirmDialog from "./ConfirmDialog.vue";
-import AccountDialog from "./AccountDialog.vue";
+import AccountDialog from "./CreateAccountDialog.vue";
 import ErrorMessage from "./errorMessage.vue";
 
 export default {

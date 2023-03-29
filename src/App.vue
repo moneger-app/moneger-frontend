@@ -33,7 +33,6 @@
                 v-if="isAuth"
                 ref="navigationDrawer"
             />
-
         </div>
     </v-app>
 </template>
@@ -104,6 +103,7 @@ export default {
 
 <style>
 .header {
+    height: 90px;
     width: 100%;
     position: fixed;
     padding: 20px;

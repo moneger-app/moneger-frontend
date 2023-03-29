@@ -45,6 +45,7 @@ export default {
 }
 .wrap {
     margin: 0 auto;
+    width: 80%;
 }
 .google-auth-button {
     max-width: 250px;

@@ -105,6 +105,9 @@ export default {
 
                 if (this.isFirstAccount && this.currency !== 'USD') {
                     await this.$axios.put('/profile/options/currency', { currency: this.currency })
+
+                    const userData = this.$store.getters.getUser
+                    userData.currency = this.currency
                 }
 
                 this.isOpen = false

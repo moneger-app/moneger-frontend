@@ -47,15 +47,21 @@
         </v-btn>
 
         <account-dialog ref="accountDialog"/>
+
+        <error-message
+            ref="errorMessage"
+            error-text="Счёт с таким именем уже существует"
+        />
     </div>
 </template>
 
 <script>
-import AccountDialog from "./AccountDialog.vue";
+import AccountDialog from "./CreateAccountDialog.vue";
+import ErrorMessage from "./errorMessage.vue";
 
 export default {
     name: "Accounts",
-    components: {AccountDialog},
+    components: {ErrorMessage, AccountDialog},
     data() {
         return {
         }
@@ -92,8 +98,15 @@ export default {
             const sameValues = item.name === item.adjustedName
             if (sameValues) return
 
-            item.name = item.adjustedName
-            await this.$axios.put(`/account?id=${item.id}`, { name: item.name })
+            await this.$axios.put(`/account?id=${item.id}`, { name: item.adjustedName }).then(async response => {
+                    if (response === 409) {
+                        this.$refs.errorMessage.showMessage()
+                        item.adjustedName = item.name
+                        return
+                    }
+
+                    item.name = item.adjustedName
+            })
         },
         canselAdjust(item) {
             item.isAdjusted = false
@@ -101,7 +114,6 @@ export default {
         },
         async deleteAccount(currentId) {
             let accounts = this.accounts
-            console.log(accounts)
             const id = accounts.findIndex(item => item.id === currentId)
 
             accounts.splice(id, 1)

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import AccountDialog from "./AccountDialog.vue";
+import AccountDialog from "./CreateAccountDialog.vue";
 
 export default {
     name: "Main",
@@ -55,7 +55,7 @@ export default {
             return this.$store.getters.getUser.currency + ' ' + String(totalSum)
         },
         accounts() {
-            return this.$store.getters.getAccounts || []
+            return this.$store.getters.getAccounts
         },
     },
     methods: {
